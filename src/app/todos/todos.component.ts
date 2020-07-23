@@ -13,13 +13,16 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class TodosComponent implements OnInit {
   selectedNote: any;
+  isNextDisabled = true;
   isProcessing = false;
   noteForm: FormGroup;
   isEdit = false;
   currentUser: IUser;
   deleteModalRef: BsModalRef;
   modalRef: BsModalRef;
+  page = 0;
   notes: any[];
+  totalCount: any;
   constructor(
     private noteService: NoteService,
     private modalService: BsModalService,
@@ -34,8 +37,10 @@ export class TodosComponent implements OnInit {
     this.getNotes();
   }
   getNotes() {
-    this.noteService.getAll().subscribe((notes: Array<any>) => {
-      this.notes = notes;
+    this.noteService.getAll(this.page).subscribe((notes: any) => {
+      this.notes = notes.notes;
+      this.totalCount = notes.totalCount;
+      this.isNextDisabled = (this.page + 1) * 10 >= this.totalCount ? true : false;
     }, error => {
       this.redirectIfTokenVarificationFailed(error);
       this.toastr.error(error.error.message || 'Error while getting notes.');
@@ -68,6 +73,7 @@ export class TodosComponent implements OnInit {
   }
   deleteNote() {
     this.isProcessing = true;
+    this.page=0
     this.noteService.delete(this.selectedNote._id).subscribe((note: any) => {
       this.deleteModalRef.hide();
       this.getNotes();

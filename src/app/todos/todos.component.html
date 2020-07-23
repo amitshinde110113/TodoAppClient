@@ -25,9 +25,18 @@
           <button class="btn btn-primary float-right" (click)="openAddNoteModel(addNoteModal)"> Add New</button>
         </div>
       </div>
-      <div class="row p-4 " *ngFor="let note of notes;index as i">
+      <div class="row p-4">
+        <div class="col-2">
+          <button class="btn btn-info float-right btn-sm" [disabled]='page==0' (click)="page=page-1;getNotes()">Prev</button>
+        </div>
+        <div class="col-8"></div>
+        <div class="col-2">
+          <button class="btn btn-info float-right btn-sm" [disabled]="isNextDisabled" (click)="page=page+1;getNotes()">Next</button>
+        </div>
+      </div>
+      <div class="row pr-4 pl-4 mb-2 one-edge-shadow" *ngFor="let note of notes;index as i">
         <div class="col-9">
-          <h4 data-toggle="collapse" class="text-primary cursor" [attr.data-target]="'#note'+i">{{note?.title}}</h4>
+          <h6 data-toggle="collapse" class="text-primary cursor" [attr.data-target]="'#note'+i">{{note?.title |titlecase}}</h6>
           <small>Created At : {{note?.createdAt|date:'medium'}}</small>
         </div>
         <div class="col-3 ">

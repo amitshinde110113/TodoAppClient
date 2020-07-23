@@ -20,7 +20,7 @@ export class NoteService {
   getById(id) {
     return this.http.get(`${this.baseUrl}/${id}`);
   }
-  getAll() {
-    return this.http.get(`${this.baseUrl}/`);
+  getAll(page) {
+    return this.http.get(`${this.baseUrl}/pagination/${page}`);
   }
 }
