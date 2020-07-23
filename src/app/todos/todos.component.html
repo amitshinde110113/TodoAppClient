@@ -1,0 +1,107 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" href="javascript:void(0)">My Todo App</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+    </ul>
+    <form class="form-inline my-2 my-lg-0">
+      <h4 class="mr-4 " style="color: white;"><strong>Hello {{currentUser?.name}}</strong></h4>
+      <button class="btn btn-outline-success my-2 my-sm-0" (click)="logout()" type="button">Logout</button>
+    </form>
+  </div>
+</nav>
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-sm-3"></div>
+    <div class="col-sm-6">
+      <div class="row p-4 ">
+        <div class="col-6">
+          <h4>My Todo List</h4>
+        </div>
+        <div class="col-6">
+          <button class="btn btn-primary float-right" (click)="openAddNoteModel(addNoteModal)"> Add New</button>
+        </div>
+      </div>
+      <div class="row p-4 " *ngFor="let note of notes;index as i">
+        <div class="col-9">
+          <h4 data-toggle="collapse" class="text-primary cursor" [attr.data-target]="'#note'+i">{{note?.title}}</h4>
+          <small>Created At : {{note?.createdAt|date:'medium'}}</small>
+        </div>
+        <div class="col-3 ">
+          <button type="button" class="close text-right " style="display: inline-block;
+          vertical-align: top;  width:45px; color:red" data-toggle="tooltip" title="Delete"
+            (click)="openDeleteConfirm(deleteNoteTemplate,note)">&times;</button>
+          <button type="button" class="close mr-2" style="display: inline-block;
+          vertical-align: top; width: 20px;font-size: 20px;" data-toggle="tooltip" title="Edit"
+            (click)="openEditNoteModel(addNoteModal,note)">Edit</button>
+        </div>
+        <div id="{{'note'+i}}" class="collapse ml-3">
+          {{note?.description}}
+        </div>
+      </div>
+      <div *ngIf="notes?.length==0" class="col-12 p-4 text-center">
+        Its look like you havent added any note yet.
+      </div>
+    </div>
+    <div class="col-sm-3"> </div>
+  </div>
+</div>
+
+
+<ng-template #deleteNoteTemplate>
+  <div class="p-1">
+    <div class="modal-header p-1">
+      <h2 class="modal-title">Delete note</h2>
+      <button type="button" class="close text-right" data-dismiss="modal"
+        (click)="deleteModalRef.hide()">&times;</button>
+    </div>
+
+
+    <div class="modal-body ">
+      <p class=" mb--4 text-danger">Are you sure you want to delete </p>
+      <small>This action can not be reversed.</small>
+    </div>
+    <div class="mt-2">
+      <button type="button" (click)="deleteNote()" style="float: right;"
+        class="btn btn-danger btn-sm  mr-2">Delete</button>
+      <button type="button" style="float: right;" class="btn btn-primary btn-sm  mr-2"
+        (click)="deleteModalRef.hide()">Close</button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #addNoteModal>
+  <div class="p-1">
+    <div class="modal-header p-1">
+      <h2 class="modal-title">{{ isEdit ? 'Update Note' : 'Add Note' }}</h2>
+      <button type="button" class="close text-right" data-dismiss="modal" (click)="modalRef.hide()">&times;</button>
+    </div>
+
+    <form [formGroup]="noteForm">
+      <div class="modal-body">
+        <div class="row  ">
+          <label class="mb--1">Note Title</label>
+          <input class='form-group text form-control' type='text' placeholder="Title for note" formControlName="title">
+          <small *ngIf="noteForm.get('title').touched && noteForm.get('title').hasError('required')"
+            class="text-danger">Title is required.</small>
+        </div>
+        <div class="row  ">
+          <label class="mb--1">Note Description</label>
+          <textarea class='form-group text form-control' placeholder="Description about note" rows="3" type='text'
+            formControlName="description"></textarea>
+          <small *ngIf="noteForm.get('description').touched && noteForm.get('description').hasError('required')"
+            class="text-danger">Description is required.</small>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary " type="button" (click)="modalRef.hide()">cancel</button>
+        <button class="btn btn-primary add-btn " [disabled]="noteForm.invalid"
+          (click)=" isEdit ? updateNote() : addNote()"
+          type="button">{{ isProcessing ? 'Processing...' : 'Save' }}</button>
+      </div>
+    </form>
+  </div>
+</ng-template>

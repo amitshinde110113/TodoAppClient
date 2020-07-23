@@ -1,0 +1,72 @@
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-sm-4"></div>
+
+    <div class="col-sm-4">
+      <form [formGroup]="loginForm">
+
+        <div class="card" *ngIf="isLoginView">
+          <div class="card-body">
+            <h5 class="card-title text-center">Sign In</h5>
+              <div class="form-label-group mt-2">
+                <label for="inputEmail">Email address</label>
+                <input formControlName="email" type="text" autocomplete="false" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+              <small *ngIf="loginForm.get('email').touched && loginForm.get('email').hasError('required')" class="text-danger">Email is required.</small>
+              <small *ngIf="loginForm.get('email').touched && loginForm.get('email').hasError('pattern')" class="text-danger">Enter valid email.</small>
+
+            </div>
+              <div class="form-label-group mt-2">
+                <label for="inputPassword">Password</label>
+                <input formControlName="password" type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+                <small *ngIf="loginForm.get('password').touched && loginForm.get('password').hasError('required')" class="text-danger">Password is required.</small>
+              </div>
+              <button [disabled]="loginForm.invalid" class="btn btn-lg btn-primary btn-block text-uppercase mt-2" (click)="login()" type="button">Sign in</button>
+              <div class="form-label-group mt-2">
+                <a for="inputPassword" href="javascript:void(0);"  (click)="isLoginView=false">Dont have account ? Register
+                  here</a>
+              </div>
+          </div>
+        </div>
+      </form>
+      <form [formGroup]="signupForm">
+
+      <div class="card" *ngIf="!isLoginView">
+        <div class="card-body">
+          <h5 class="card-title text-center">Sign Up</h5>
+            <div class="form-label-group mt-2">
+              <label for="inputEmail">Name</label>
+              <input formControlName="name" type="text" id="inputName" class="form-control" placeholder="Name" required autofocus>
+              <small *ngIf="signupForm.get('name').touched && signupForm.get('name').hasError('required')" class="text-danger">Name is required.</small>
+
+            </div>
+            <div class="form-label-group mt-2">
+              <label for="inputEmail">Email address</label>
+              <input formControlName="email" autocomplete="false" type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+            <small *ngIf="signupForm.get('email').touched && signupForm.get('email').hasError('required')" class="text-danger">Email is required.</small>
+            <small *ngIf="signupForm.get('email').touched && signupForm.get('email').hasError('pattern')" class="text-danger">Enter valid email.</small>
+
+          </div>
+            <div class="form-label-group mt-2">
+              <label for="inputPassword">Password</label>
+              <input formControlName="password" type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+              <small *ngIf="signupForm.get('password').touched && signupForm.get('password').hasError('required')" class="text-danger">Password is required.</small>
+              <small *ngIf="signupForm.get('password').touched &&  passLengthError" class="text-danger">Password length atleast 6 chars.</small>
+            </div>
+            <div class="form-label-group mt-2">
+              <label for="inputPassword">Confirm Password</label>
+              <input formControlName='confirmPassword' type="password" id="inputConfirmPassword" class="form-control" placeholder="Confirm Password"
+                required>
+              <small *ngIf="signupForm.get('confirmPassword').touched &&  confirmPassError" class="text-danger">Password and Confirm Password not matched.</small>
+            </div>
+            <button [disabled]="signupForm.invalid || passLengthError || confirmPassError" class="btn btn-lg btn-primary btn-block text-uppercase mt-2" (click)="signUp()" type="button">Register</button>
+            <div class="form-label-group mt-2">
+              <a for="inputPassword" href="javascript:void(0);" (click)="isLoginView=true">Already have account ? Login
+                here</a>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="col-sm-4"></div>
+  </div>
+</div>
